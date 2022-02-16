@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Weather Forecast for Juji</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"
+        integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="my-5">
+                <div class="welcome">
+                    Current Weather and 7 Day Forecast for New York
+                </div>
+
+                <div class="alert alert-info" v-show="loading1 || loading2">
+                    Loading...
+                </div>
+
+                <div v-show="!loading1">
+                    <div class="location-box">
+                        <div class="location">New York, USA</div>
+                        <div class="date">{{ dateBuilder() }}</div>
+                    </div>
+                    <div class="weather-box">
+                        <div class="temp">Curr: {{ curr_temp }}°F, High: {{ curr_high }}°F, Low: {{ curr_low }}°F</div>
+                        <div class="weather">Status: {{ curr_desc }}</div>
+                    </div>
+                </div>
+
+                <div style="text-align:center">
+                    <button v-on:click="t_ws = !t_ws">Toggle Wind Speed</button>
+                    <div v-if="t_ws">Wind Speed: {{curr_ws}} mph</div>
+                    <br/>
+    
+                    <button v-on:click="t_hum = !t_hum">Toggle Humidity</button>
+                    <div v-if="t_hum">Humidity: {{curr_hum}}%</div>
+                    <br/>
+    
+                    <button v-on:click="t_pres = !t_pres">Toggle Pressure</button>
+                    <div v-if="t_pres">Pressure: {{curr_pres}} hPa</div>
+                    <br/>
+    
+                    <button v-on:click="t_sunrise = !t_sunrise">Toggle Sunrise Time</button>
+                    <div v-if="t_sunrise">Sunrise Time: {{curr_sunrise}}</div>
+                    <br/>
+    
+                    <button v-on:click="t_sunset = !t_sunset">Toggle Sunset Time</button>
+                    <div v-if="t_sunset">Sunset Time: {{curr_sunset}}</div>
+                    <br/>
+                </div>
+
+                <br/>
+
+                <div v-show="chart != null">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.7/vue.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+<script src="weather.js"></script>
+
+</html>
+
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: sans-serif;
+    }
+
+    /* #app {
+        background-image: url(https://cdn.getyourguide.com/img/tour/5ca4db0039bf6.jpeg/99.jpg);
+        background-size: cover;
+        background-position: bottom;
+        transition: 0.4s;
+    }
+
+    main {
+        min-height: 100vh;
+        padding: 25px;
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.24), rgba(0, 0, 0, 0.75))
+    } */
+
+    .welcome {
+        color: black;
+        font-size: 48px;
+        font-weight: 500;
+        text-align: center;
+        padding: 0 0 20px 0;
+    }
+
+    .location-box .location {
+        color: black;
+        font-size: 32px;
+        font-weight: 500;
+        text-align: center;
+        /* text-shadow: 1px 3px rgba(0, 0, 0, 0.5); */
+
+    }
+
+    .location-box .date {
+        color: black;
+        font-size: 20px;
+        font-weight: 300;
+        font-style: italic;
+        text-align: center;
+    }
+
+    .weather-box {
+        text-align: center;
+    }
+
+    .weather-box .temp {
+        display: inline-block;
+        padding: 10px 25px;
+        color: black;
+        font-size: 32px;
+        font-weight: 900;
+
+        /* text-shadow: 3px 6px rgba(0, 0, 0, 0.25); */
+        /* background-color: rgba(255, 255, 255, 0.25);
+        border-radius: 16px;
+        margin: 30px 0px; */
+
+        /* box-shadow: 3px 6px rgba(0, 0, 0, 0.25); */
+    }
+
+    .weather-box .weather {
+        color: black;
+        font-size: 32px;
+        font-weight: 700;
+        font-style: italic;
+        /* text-shadow: 3px 6px rgba(0, 0, 0, 0.25); */
+    }
+</style>
